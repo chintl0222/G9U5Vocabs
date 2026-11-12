@@ -1,0 +1,408 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Unit 5 Our Experiences</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: one slide at a time. Left a cartoon illustration card, right a white word card (word, US audio, meaning, example, word family). Bottom bar with prev/next and progress. */
+:root{
+  --ink:#2b2a4c;
+  --ink-soft:#5a5880;
+  --paper:#ffffff;
+  --stage:#fff6cf;
+  --tint:#fff6cf;
+  --acc:#ffd23f;
+  --grape:#7a5af5;
+  --font-display:'Fredoka','Nunito',system-ui,sans-serif;
+  --font-body:'Nunito',system-ui,sans-serif;
+  --font-ipa:'Noto Sans','Segoe UI','DejaVu Sans',system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--stage);color:var(--ink);font-family:var(--font-body);font-size:18px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:16px 24px;
+  transition:background .4s ease;
+}
+.app{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+button{font:inherit;color:inherit}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:800;font-size:16px;background:var(--paper);color:var(--ink);
+  border:3px solid var(--ink);border-radius:999px;padding:8px 18px;cursor:pointer;
+  box-shadow:0 4px 0 var(--ink);transition:transform .08s,box-shadow .08s;
+}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.btn:focus-visible,.chip:focus-visible,.item:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
+.btn.acc{background:var(--acc)}
+.btn.big{font-size:20px;padding:12px 26px}
+.btn[aria-pressed="true"]{background:var(--acc)}
+.btn svg{width:20px;height:20px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:600;font-size:22px}
+.brand b{background:var(--acc);border:3px solid var(--ink);border-radius:14px;padding:2px 12px;font-weight:700;transition:background .4s}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.count{font-family:var(--font-display);font-weight:600;font-size:20px;min-width:64px;text-align:center}
+#stage{min-width:0}
+.slide{display:grid;grid-template-columns:5fr 6fr;gap:26px;align-items:stretch}
+.slide[hidden]{display:none}
+.art{
+  position:relative;background:var(--acc);border:3px solid var(--ink);border-radius:36px;box-shadow:0 8px 0 var(--ink);
+  display:grid;place-items:center;padding:clamp(16px,3vw,30px);min-width:0;overflow:hidden;transition:background .4s;
+}
+.disc{width:100%;max-width:430px;aspect-ratio:1;border-radius:38%;background:rgba(255,255,255,.86);display:grid;place-items:center}
+.disc svg{width:94%;height:auto;display:block;animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-7px) rotate(-1.2deg)}}
+@keyframes pop{from{transform:scale(.88);opacity:.2}to{transform:scale(1);opacity:1}}
+.slide.in .art,.slide.in .info{animation:pop .45s cubic-bezier(.2,1.3,.4,1)}
+.info{
+  background:var(--paper);border:3px solid var(--ink);border-radius:36px;box-shadow:0 8px 0 var(--ink);
+  padding:clamp(20px,3.2vw,36px);display:flex;flex-direction:column;gap:16px;min-width:0;
+}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.pos{background:var(--acc);border:2.5px solid var(--ink);border-radius:999px;padding:2px 14px;font-weight:800;font-size:17px;transition:background .4s}
+.posvi{color:var(--ink-soft);font-weight:700;font-size:16px}
+.num{margin-left:auto;font-family:var(--font-display);font-weight:600;color:var(--ink-soft)}
+.word{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(40px,5.4vw,70px);line-height:1.02;overflow-wrap:anywhere;text-wrap:balance}
+.sayrow{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.say{
+  width:62px;height:62px;border-radius:50%;background:var(--acc);border:3px solid var(--ink);box-shadow:0 5px 0 var(--ink);
+  display:grid;place-items:center;cursor:pointer;flex:none;transition:transform .08s,box-shadow .08s,background .4s;
+}
+.say:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.say:focus-visible{outline:4px solid var(--grape);outline-offset:3px}
+.say svg{width:30px;height:30px}
+.say.small{width:46px;height:46px;box-shadow:0 4px 0 var(--ink)}
+.say.small svg{width:22px;height:22px}
+.say.playing{animation:ring .7s ease-in-out infinite}
+@keyframes ring{50%{transform:scale(1.1)}}
+.ipa{font-family:var(--font-ipa);font-size:clamp(22px,2.6vw,30px);font-weight:600;letter-spacing:.01em}
+.us{font-size:13px;font-weight:800;letter-spacing:.08em;border:2px solid var(--ink);border-radius:8px;padding:0 7px;color:var(--ink)}
+.slow{font-size:14px;padding:5px 12px;box-shadow:0 3px 0 var(--ink)}
+.lbl{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 4px}
+.mean{margin:0;font-size:clamp(22px,2.6vw,28px);font-weight:800;line-height:1.25}
+.ex{display:flex;gap:12px;align-items:flex-start;background:var(--tint);border-radius:22px;padding:14px 16px;transition:background .4s}
+.ex p{margin:0;font-size:clamp(17px,1.9vw,20px);font-weight:600;min-width:0}
+mark{background:var(--acc);color:var(--ink);border-radius:7px;padding:0 5px;font-weight:800;transition:background .4s}
+.fam{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  font-weight:700;font-size:16px;background:var(--paper);border:2.5px solid var(--ink);border-radius:999px;padding:3px 13px;cursor:pointer;
+}
+.chip:active{background:var(--tint)}
+.chip i{font-style:normal;color:var(--ink-soft);font-weight:700;margin-left:4px}
+.chip.none{cursor:default;color:var(--ink-soft)}
+.cover{align-items:center}
+.cover .copy{display:flex;flex-direction:column;gap:18px;align-items:flex-start;min-width:0}
+.eyebrow{margin:0;background:var(--acc);border:3px solid var(--ink);border-radius:999px;padding:3px 18px;font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:.06em}
+.cover h1{margin:0;font-family:var(--font-display);font-weight:700;font-size:clamp(46px,8vw,96px);line-height:.98;text-wrap:balance}
+.cover .sub{margin:0;font-size:clamp(19px,2.4vw,24px);font-weight:700;color:var(--ink-soft)}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tile{border:3px solid var(--ink);border-radius:28px;box-shadow:0 5px 0 var(--ink);background:var(--c);padding:6px;min-width:0}
+.tile svg{width:100%;height:auto;display:block;background:rgba(255,255,255,.8);border-radius:22px}
+.tile:nth-child(2n) svg{animation:bob 3.4s ease-in-out infinite .5s}
+.tile:nth-child(3n) svg{animation:bob 3.4s ease-in-out infinite 1s}
+.end .art{min-height:300px}
+.end .copy{display:flex;flex-direction:column;gap:18px;justify-content:center;align-items:flex-start;background:var(--paper);border:3px solid var(--ink);border-radius:36px;box-shadow:0 8px 0 var(--ink);padding:clamp(20px,3.2vw,36px)}
+.end h2{margin:0;font-family:var(--font-display);font-size:clamp(38px,5.6vw,64px);line-height:1.05}
+.end p{margin:0;font-size:20px;font-weight:700;color:var(--ink-soft)}
+nav{display:flex;align-items:center;gap:14px}
+.track{flex:1;height:16px;background:var(--paper);border:3px solid var(--ink);border-radius:999px;overflow:hidden;min-width:0}
+.fill{height:100%;width:var(--pct,0%);background:var(--acc);border-right:3px solid var(--ink);transition:width .35s ease,background .4s}
+.fill[style*="--pct:0%"]{border-right:0}
+.hint{font-size:14px;font-weight:700;color:var(--ink-soft);text-align:center;margin:0}
+.menu{position:fixed;inset:0;z-index:20;background:rgba(43,42,76,.55);display:grid;place-items:center;padding:16px}
+.panel{background:var(--paper);border:3px solid var(--ink);border-radius:32px;box-shadow:0 8px 0 var(--ink);padding:22px;width:min(920px,100%);max-height:88vh;overflow:auto}
+.panel h2{margin:0 0 14px;font-family:var(--font-display);font-size:28px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.item{background:var(--c);border:2.5px solid var(--ink);border-radius:16px;padding:8px 12px;text-align:left;font-weight:800;font-size:16px;cursor:pointer;display:flex;gap:8px;align-items:baseline;min-width:0;overflow-wrap:anywhere}
+.item small{font-family:var(--font-display);color:var(--ink-soft);font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:10px 20px;font-weight:700;font-size:15px;z-index:30;max-width:92vw;text-align:center}
+@media (max-width:820px){
+  .slide{grid-template-columns:1fr;gap:20px}
+  .disc{max-width:300px}
+  .hint{display:none}
+  .btn.big{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="app">
+  <header>
+    <div class="brand"><b>UNIT 5</b><span>Our Experiences</span></div>
+    <div class="tools">
+      <button class="btn" id="auto" aria-pressed="false" type="button">Tự đọc: Tắt</button>
+      <button class="btn" id="open" type="button">Danh sách từ</button>
+      <span class="count" id="count" aria-live="polite">1 / 27</span>
+    </div>
+  </header>
+  <main id="stage"></main>
+  <nav>
+    <button class="btn" id="prev" type="button" aria-label="Từ trước">&#8592; Trước</button>
+    <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="25" aria-valuenow="0"><div class="fill" id="fill" style="--pct:0%"></div></div>
+    <button class="btn acc" id="next" type="button" aria-label="Từ tiếp theo">Tiếp &#8594;</button>
+  </nav>
+  <p class="hint">Dùng phím ← → để chuyển từ. Bấm nút loa để nghe giọng Mỹ (giọng đọc tuỳ thiết bị của bạn).</p>
+</div>
+
+<div class="menu" id="menu" hidden>
+  <div class="panel" role="dialog" aria-label="Danh sách từ vựng">
+    <h2>Danh sách từ vựng <button class="btn" id="close" type="button">Đóng</button></h2>
+    <div class="items" id="items"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ---------- Illustration kit ---------- */
+const K='#2b2a4c';
+const S=(w=3.5)=>`stroke="${K}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
+const P=(d,f,w)=>`<path d="${d}" fill="${f}" ${S(w)}/>`;
+const C=(x,y,r,f,w)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" ${S(w)}/>`;
+const E=(x,y,rx,ry,f,w)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${S(w)}/>`;
+const R=(x,y,w,h,r,f,sw)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${f}" ${S(sw)}/>`;
+const L=(d,w=3.5,c=K)=>`<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const G=(t,inner)=>`<g transform="${t}">${inner}</g>`;
+const thick=(d,c,w)=>L(d,w+7,K)+L(d,w,c);
+const raw=(x,y,rx,ry,f,o=1)=>`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" opacity="${o}"/>`;
+const dot=(x,y,r,f=K)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${f}"/>`;
+const spark=(x,y,s,c='#fff')=>`<path transform="translate(${x} ${y}) scale(${s})" d="M0 -10Q2 -2 10 0Q2 2 0 10Q-2 2 -10 0Q-2 -2 0 -10Z" fill="${c}" stroke="${K}" stroke-width="${(2.4/s).toFixed(2)}" stroke-linejoin="round"/>`;
+const heart=(x,y,s,c)=>`<path transform="translate(${x} ${y}) scale(${s})" d="M0 10C-14 0 -10 -10 -4 -9C-2 -9 0 -7 0 -5C0 -7 2 -9 4 -9C10 -10 14 0 0 10Z" fill="${c}" stroke="${K}" stroke-width="${(3/s).toFixed(2)}" stroke-linejoin="round"/>`;
+const star=(cx,cy,Ro,ri,f,w=3)=>{const p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?ri:Ro;p.push((cx+q*Math.cos(a)).toFixed(1)+','+(cy+q*Math.sin(a)).toFixed(1));}return `<polygon points="${p.join(' ')}" fill="${f}" ${S(w)}/>`;};
+const bub=(x,y,r)=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#fff" fill-opacity=".7" stroke="${K}" stroke-width="2.5"/>`;
+const note=(x,y,c)=>`<ellipse cx="${x}" cy="${y}" rx="8" ry="6" fill="${c}" ${S(2.8)} transform="rotate(-20 ${x} ${y})"/>`+L(`M${x+7} ${y-1}V${y-26}Q${x+16} ${y-22} ${x+14} ${y-12}`,3.2);
+const T=(x,y,t,sz,f,st)=>`<text x="${x}" y="${y}" text-anchor="middle" font-family="Fredoka,Nunito,sans-serif" font-weight="700" font-size="${sz}" fill="${f}" ${st?`stroke="${K}" stroke-width="3" paint-order="stroke" stroke-linejoin="round"`:''}>${t}</text>`;
+function face(x,y,s,m){
+  const eye=(cx,r)=>`<ellipse cx="${cx}" cy="-4" rx="4.2" ry="${r}" fill="${K}"/><circle cx="${cx+1.5}" cy="${(-4-r*.45).toFixed(1)}" r="1.6" fill="#fff"/>`;
+  const arc=cx=>L(`M${cx-5.5} -2Q${cx} -10 ${cx+5.5} -2`,3.4);
+  const tear=sx=>`<path d="M${sx} 2q-4 7 0 9q4 -2 0 -9Z" fill="#8fdcff" stroke="${K}" stroke-width="1.6"/>`;
+  let e='',mo='',ex='',blush=true;
+  switch(m){
+    case 'wow': e=eye(-15,6.4)+eye(15,6.4); mo=`<ellipse cx="0" cy="13" rx="5.5" ry="7" fill="${K}"/><ellipse cx="0" cy="16" rx="3.2" ry="2.6" fill="#ff7a8a"/>`;break;
+    case 'grin': e=eye(-15,5.4)+eye(15,5.4); mo=`<path d="M-11 6Q0 26 11 6Z" fill="${K}" ${S(3)}/><path d="M-5 15Q0 20 5 15Q0 11 -5 15Z" fill="#ff7a8a"/>`;break;
+    case 'sad': e=eye(-15,5)+eye(15,5); ex=L('M-22 -13L-9 -18',3)+L('M22 -13L9 -18',3); mo=L('M-8 16Q0 8 8 16',3.2);break;
+    case 'worry': e=eye(-15,5.6)+eye(15,5.6); ex=L('M-22 -13L-9 -18',3)+L('M22 -13L9 -18',3)+tear(-27); mo=L('M-9 14Q-4.5 9 0 14T9 14',3.2);break;
+    case 'grumpy': e=eye(-15,4.2)+eye(15,4.2); ex=L('M-23 -19L-8 -12',3.2)+L('M23 -19L8 -12',3.2); mo=L('M-8 15Q0 8 8 15',3.2); blush=false;break;
+    case 'shy': e=arc(-15)+arc(15); mo=L('M-4 10Q0 13.5 4 10',3.2);break;
+    case 'touch': e=arc(-15)+arc(15); ex=tear(-21)+tear(21); mo=L('M-8 8Q0 17 8 8',3.2);break;
+    case 'proud': e=arc(-15)+arc(15); mo=`<path d="M-10 6Q0 22 10 6Z" fill="${K}" ${S(3)}/>`;break;
+    default: e=eye(-15,5.2)+eye(15,5.2); mo=L('M-8 8Q0 17 8 8',3.2);
+  }
+  const b=blush?`<ellipse cx="-25" cy="8" rx="6.5" ry="4.2" fill="#ff8fa3" opacity=".75"/><ellipse cx="25" cy="8" rx="6.5" ry="4.2" fill="#ff8fa3" opacity=".75"/>`:'';
+  return `<g transform="translate(${x} ${y}) scale(${s})">${b}${e}${ex}${mo}</g>`;
+}
+
+/* ---------- 25 illustrations (order matches WORDS) ---------- */
+const ART=[
+/* amazing */ ()=>star(120,128,70,34,'#ffd23f',5)+face(120,128,1.05,'wow')+spark(38,60,1.3)+spark(204,50,1)+spark(208,172,1.2,'#ffd23f')+spark(32,176,.9,'#ffd23f'),
+/* army-like */ ()=>E(120,214,70,9,'#d6dcf0',3)+C(120,142,56,'#ffd9b3',4)+P('M60 134Q60 66 120 66Q180 66 180 134Z','#6ab04c',4)+P('M48 134H192Q192 148 178 148H62Q48 148 48 134Z','#4a8a35',4)+star(120,102,15,7,'#ffd23f',3)+L('M82 118Q120 108 158 118',3,'#4a8a35')+face(120,172,.85,'proud'),
+/* brilliant */ ()=>{let r='';for(let i=0;i<9;i++){const a=(-160+i*20)*Math.PI/180;r+=L(`M${(120+70*Math.cos(a)).toFixed(1)} ${(100+70*Math.sin(a)).toFixed(1)}L${(120+92*Math.cos(a)).toFixed(1)} ${(100+92*Math.sin(a)).toFixed(1)}`,6,'#ff9f43');}
+  return r+P('M120 45C168 45 188 85 172 118C164 134 152 140 148 155H92C88 140 76 134 68 118C52 85 72 45 120 45Z','#ffe66d',4)+R(95,152,50,36,10,'#b8c1ec',4)+L('M100 166H140M102 178H138',3)+face(120,105,1.1,'grin')+spark(44,160,1)+spark(200,168,1.1,'#ffd23f');},
+/* campus */ ()=>E(120,206,104,12,'#9be3a8',3)+R(204,160,10,40,3,'#a0522d',3)+C(209,142,26,'#3ddc97',3.5)+L('M120 52V26',3.5)+P('M120 26L148 35L120 44Z','#ff4d6d',3)+P('M44 110L120 54L196 110Z','#ee6c4d',4)+R(58,108,124,92,8,'#ffd6a5',4)+R(70,120,26,26,5,'#a0e7ff',3)+R(144,120,26,26,5,'#a0e7ff',3)+R(70,156,26,26,5,'#a0e7ff',3)+R(144,156,26,26,5,'#a0e7ff',3)+P('M104 200V170Q104 158 120 158Q136 158 136 170V200Z','#4cc9f0',3.5)+C(120,88,14,'#fff',3)+L('M120 88V79M120 88L127 92',3)+face(120,136,.68,'happy'),
+/* confidence */ ()=>P('M82 104L34 198Q120 216 206 198L158 104Z','#ff6b6b',4)+C(120,144,54,'#4cc9f0',4)+C(66,172,12,'#4cc9f0',3.5)+C(174,172,12,'#4cc9f0',3.5)+P('M92 94L98 66L112 82L120 62L128 82L142 66L148 94Z','#ffd23f',3.5)+face(120,148,1.05,'proud')+spark(40,70,1.2)+spark(204,80,1,'#ffd23f'),
+/* coral reef */ ()=>R(25,35,190,170,30,'#bdeeff',4)+P('M25 168Q70 150 120 166T215 160V178Q215 205 185 205H55Q25 205 25 178Z','#ffe3a3',4)+thick('M70 192V142M70 168L52 142M70 158L90 130','#ff6b8a',11)+thick('M165 192V152M165 172L186 144M165 162L148 138','#ff9f43',11)+C(118,190,23,'#c19bff',3.5)+face(118,192,.55,'happy')+E(136,96,24,16,'#ffd23f',3.5)+P('M112 96L92 80V112Z','#ff9f43',3.5)+L('M129 83Q123 96 129 109',3)+dot(146,92,4)+L('M148 103Q152 105 156 102',2.5)+bub(172,68,7)+bub(184,50,5)+bub(60,82,6),
+/* eco-tour */ ()=>C(190,186,22,'#4cc9f0',3.5)+P('M178 180Q188 170 197 178Q192 192 182 190Z','#3ddc97',2.5)+P('M120 50Q205 78 192 150Q175 212 120 212Q65 212 48 150Q35 78 120 50Z','#3ddc97',4)+L('M120 212V176M120 194L98 176M120 194L142 176',3,'#1fa971')+P('M90 70Q92 36 120 36Q148 36 150 70Z','#e9c46a',3.5)+E(120,72,48,10,'#e9a63a',3.5)+L('M94 62Q120 68 146 62',3)+face(120,142,1.1,'happy')+spark(40,110,1.1,'#ffd23f')+spark(60,200,.8,'#ffd23f'),
+/* embarrassing */ ()=>C(120,128,70,'#ffd9c7',4)+L('M108 60Q116 38 124 58',4)+L('M122 58Q136 44 140 60',4)+raw(76,142,17,11,'#ff6f8c',.8)+raw(164,142,17,11,'#ff6f8c',.8)+face(120,128,1.7,'shy')+P('M200 62Q188 86 200 94Q212 86 200 62Z','#8fdcff',3)+P('M40 70Q32 86 40 92Q48 86 40 70Z','#8fdcff',2.5)+L('M44 168l8 -8l8 8l8 -8',3,'#ff6f8c')+L('M168 168l8 -8l8 8l8 -8',3,'#ff6f8c'),
+/* exhilarating */ ()=>P('M10 160Q40 140 70 160T130 160T190 160T236 150V216H10Z','#7fdcf7',3.5)+P('M150 46V140H208Z','#fff',3.5)+L('M150 44V152',4)+P('M150 44L174 53L150 62Z','#ff6b6b',2.5)+P('M58 150H192L174 190H78Z','#ff6b6b',3.5)+L('M70 165H180',3,'#fff')+L('M84 128L62 86',5)+L('M132 128L140 86',5)+C(62,84,8,'#ffd23f',3)+C(140,84,8,'#ffd23f',3)+C(108,114,30,'#ffd23f',3.5)+face(108,116,.62,'wow')+P('M10 170Q40 152 70 170T130 170T190 170T236 162V216H10Z','#4cc9f0',3.5)+bub(200,118,6)+bub(212,100,4)+bub(34,126,5)+spark(40,60,1)+spark(210,60,.9,'#ffd23f'),
+/* experience */ ()=>thick('M98 92V72Q98 60 110 60H130Q142 60 142 72V92','#d9772a',5)+R(52,88,136,108,22,'#ff9f43',4)+R(80,88,14,108,0,'#e8832b',3)+R(146,88,14,108,0,'#e8832b',3)+star(87,114,14,6,'#ffd23f',2.5)+heart(153,176,1.2,'#ff6b8a')+C(168,112,12,'#4cc9f0',3)+L('M156 112H180M168 100V124',2)+face(120,152,.82,'happy')+C(78,206,8,K)+C(162,206,8,K)+spark(36,70,1.1)+spark(206,70,1,'#ffd23f'),
+/* explore */ ()=>R(108,36,24,18,5,'#c0c6e0',3.5)+C(120,126,76,'#fff3b0',4)+`<circle cx="120" cy="126" r="62" fill="none" stroke="${K}" stroke-width="2.5" stroke-dasharray="3 7"/>`+G('rotate(40 120 126)',P('M120 62L137 126H103Z','#ff6b6b',3)+P('M120 190L137 126H103Z','#fff',3))+face(120,126,.85,'grin')+T(120,86,'N',20,K)+spark(34,56,1.1)+spark(208,200,1.1,'#ffd23f'),
+/* fauna */ ()=>P('M18 204L38 152L58 204Z','#3ddc97',3)+P('M182 204L204 144L226 204Z','#3ddc97',3)+P('M44 108L58 44L100 78Q120 72 140 78L182 44L196 108Q202 172 120 192Q38 172 44 108Z','#ff9f43',4)+P('M62 92L66 62L88 80Z','#ffd6e0',2.5)+P('M178 92L174 62L152 80Z','#ffd6e0',2.5)+P('M66 138Q120 120 174 138Q164 186 120 192Q76 186 66 138Z','#fff7ea',3)+`<ellipse cx="90" cy="116" rx="6" ry="8" fill="${K}"/><ellipse cx="150" cy="116" rx="6" ry="8" fill="${K}"/>`+dot(92,112,2,'#fff')+dot(152,112,2,'#fff')+E(120,144,10,7,K,2)+L('M108 154Q120 166 132 154',3.2)+raw(72,142,10,6,'#ff8fa3',.8)+raw(168,142,10,6,'#ff8fa3',.8),
+/* flora */ ()=>{let p='';for(let i=0;i<8;i++)p+=`<ellipse cx="120" cy="60" rx="20" ry="30" fill="#ff8fb8" ${S(3.5)} transform="rotate(${i*45} 120 108)"/>`;
+  return thick('M120 140Q116 180 120 218','#3ddc97',7)+P('M119 196Q80 196 68 164Q110 164 119 196Z','#3ddc97',3.5)+P('M121 180Q160 180 172 150Q130 150 121 180Z','#3ddc97',3.5)+p+C(120,108,36,'#ffd23f',4)+face(120,108,.95,'happy')+spark(30,60,1)+spark(212,200,1,'#ffd23f');},
+/* lack */ ()=>P('M72 56H168L158 196Q157 208 145 208H95Q83 208 82 196Z','#e6f9ff',4)+`<path d="M86 188Q120 178 154 188L154.5 195Q153 204 144 204H96Q87 204 85.5 195Z" fill="#7fdcf7"/>`+E(120,56,48,8,'#fff',3.5)+face(120,126,1,'sad')+P('M196 62Q184 86 196 94Q208 86 196 62Z','#8fdcff',3)+L('M34 150l10 -10M34 140l10 10',3.5,'#ff8fb8')+L('M200 150l10 -10M200 140l10 10',3.5,'#ff8fb8'),
+/* learn by rote */ ()=>P('M100 196L84 230L108 216L120 234L132 216L156 230L140 196Z','#ff6b6b',3.5)+E(120,150,50,58,'#3ddc97',4)+raw(120,168,30,38,'#b8f2d0')+P('M72 136Q58 170 80 196Q86 162 80 140Z','#1fa971',3)+P('M168 136Q182 170 160 196Q154 162 160 140Z','#1fa971',3)+C(120,86,38,'#ff6b6b',4)+C(104,82,11,'#fff',3)+C(136,82,11,'#fff',3)+dot(106,83,5)+dot(134,83,5)+P('M108 92Q120 84 132 92Q130 116 120 120Q110 116 108 92Z','#ffd23f',3.5)+R(62,170,116,46,10,'#4cc9f0',3.5)+R(68,166,104,44,8,'#fff',3.5)+L('M120 166V210',3)+L('M78 180H108M78 190H108M78 200H100M132 180H162M132 190H162M132 200H154',2.5,'#9aa3d9')+G('translate(10 -2)',P('M150 22H214Q222 22 222 30V54Q222 62 214 62H190L176 76V62H150Q142 62 142 54V30Q142 22 150 22Z','#fff',3)+T(182,48,'abc abc',17,K)),
+/* memorable */ ()=>heart(34,62,1.2,'#ff8fb8')+heart(206,92,1.5,'#ff6b8a')+heart(40,196,1,'#ff6b8a')+G('rotate(-6 120 125)',R(55,40,130,168,10,'#fff',4)+R(68,56,104,98,6,'#a0e7ff',3)+C(148,84,15,'#ffd23f',3)+face(148,85,.4,'happy')+P('M68 154V130Q94 102 120 128T172 122V154Z','#3ddc97',3)+heart(120,182,1.6,'#ff6b8a')+R(96,32,48,16,3,'#ffd6a5',2.5))+spark(200,196,1.1,'#ffd23f'),
+/* performance */ ()=>R(20,24,200,192,18,'#6c5ce7',4)+`<path d="M120 24L70 190H170Z" fill="#fff" opacity=".28"/>`+`<path d="M20 186H220V198Q220 216 202 216H38Q20 216 20 198Z" fill="#e9c46a" ${S(4)}/>`+P('M24 24H64Q82 80 58 186H20V40Q20 24 24 24Z','#ff4d6d',3.5)+P('M216 24H176Q158 80 182 186H220V40Q220 24 216 24Z','#ff4d6d',3.5)+C(120,152,38,'#ffd23f',4)+face(120,148,.95,'wow')+L('M156 170L146 154',5)+C(158,172,8,'#ffd23f',3)+C(146,152,8,'#b8c1ec',3)+note(188,106,'#ffd23f')+note(52,118,'#ff8fb8')+spark(100,50,1,'#fff')+spark(150,70,.8,'#ffd23f'),
+/* seabed */ ()=>`<defs><clipPath id="c18"><rect x="25" y="35" width="190" height="170" rx="30"/></clipPath></defs>`+R(25,35,190,170,30,'#7fdcf7',4)+`<g clip-path="url(#c18)"><path d="M0 162Q60 142 120 160T240 152V240H0Z" fill="#ffe3a3"/><path d="M0 162Q60 142 120 160T240 152" fill="none" stroke="${K}" stroke-width="3.5"/></g>`+`<rect x="25" y="35" width="190" height="170" rx="30" fill="none" stroke="${K}" stroke-width="4"/>`+thick('M48 196Q36 170 50 150Q60 130 48 110','#3ddc97',8)+thick('M198 196Q208 172 196 152','#3ddc97',7)+star(88,176,32,16,'#ff9f43',3.5)+face(88,178,.55,'happy')+P('M150 198L128 170Q150 144 172 170Z','#ffb4c8',3.5)+L('M150 198V160M150 198L138 164M150 198L162 164',2.2)+bub(160,80,8)+bub(174,60,5)+bub(70,90,6),
+/* snorkeling */ ()=>C(120,120,50,'#ffd23f',4)+thick('M72 108Q120 94 168 108','#2b88d8',6)+R(76,100,88,40,18,'#bff0ff',4)+L('M120 102V138',3)+dot(98,120,5)+dot(142,120,5)+dot(100,118,1.6,'#fff')+dot(144,118,1.6,'#fff')+raw(86,148,8,5,'#ff8fa3',.8)+raw(154,148,8,5,'#ff8fa3',.8)+L('M104 152Q120 166 136 152',3.2)+R(110,148,20,12,5,'#ff9f43',3)+thick('M132 156Q168 150 178 112L186 54','#ff9f43',7)+C(186,52,7,'#ff6b6b',3)+P('M10 170Q35 154 62 170T118 170T174 170T236 162V216H10Z','#4cc9f0',3.5)+P('M10 192Q40 178 70 192T130 192T190 190T236 186V216H10Z','#7fdcf7',3.5)+bub(204,128,6)+bub(214,108,4)+bub(32,140,5),
+/* theme */ ()=>R(46,46,148,152,16,'#fff3b0',4)+R(60,62,120,32,10,'#9b72f2',3.5)+T(120,86,'THEME',22,'#fff')+face(120,140,1,'happy')+R(60,174,34,14,7,'#ff8fb8',2.5)+R(103,174,34,14,7,'#4cc9f0',2.5)+R(146,174,34,14,7,'#3ddc97',2.5)+C(120,46,8,'#ff4d6d',3)+spark(30,60,1.1)+spark(212,190,1.1,'#ffd23f'),
+/* thrilling */ ()=>[40,75,110,145,180,215].map(x=>L(`M${x} 206V150`,3)).join('')+L('M10 208H234',4)+thick('M12 190C52 190 66 84 104 84C142 84 152 180 188 180C208 180 222 158 230 128','#ff6b6b',7)+R(80,58,48,24,8,'#ffd23f',3.5)+L('M84 58L76 32',3.5)+L('M124 58L132 32',3.5)+C(94,44,15,'#ffd9b3',3)+face(94,45,.36,'wow')+C(116,44,15,'#ffc8a0',3)+face(116,45,.36,'wow')+L('M20 70H52M30 92H64',4,'#fff')+spark(190,60,1.1,'#ffd23f')+spark(40,130,.9),
+/* touching */ ()=>P('M120 198C20 132 34 50 84 55C104 58 114 72 120 86C126 72 136 58 156 55C206 50 220 132 120 198Z','#ff6b8a',4.5)+face(120,122,1.1,'touch')+heart(196,56,1.5,'#ff8fb8')+heart(44,66,1.1,'#ffd23f')+heart(202,196,1,'#ff8fb8')+spark(36,168,1)+spark(214,120,.9),
+/* tribal dance */ ()=>[[-34,'#ff6b6b'],[0,'#ffd23f'],[34,'#4cc9f0']].map(a=>`<ellipse cx="120" cy="44" rx="9" ry="22" fill="${a[1]}" ${S(3)} transform="rotate(${a[0]} 120 100)"/>`).join('')+thick('M92 152Q60 134 54 100','#d98a55',9)+thick('M148 152Q180 134 186 100','#d98a55',9)+C(54,94,9,'#d98a55',3)+C(186,94,9,'#d98a55',3)+P('M88 138H152L172 208H68Z','#ff9f43',4)+L('M78 170L90 160L102 170L114 160L126 170L138 160L150 170L162 160',3,'#ffd23f')+P('M74 192H166L170 208H68Z','#ffd23f',3)+C(120,102,38,'#d98a55',4)+P('M84 90Q120 76 156 90L154 102Q120 90 86 102Z','#ff6b6b',3)+face(120,108,.85,'happy')+note(32,60,'#ffd23f')+note(210,70,'#ff8fb8'),
+/* unpleasant */ ()=>{const sh=(a,b)=>`<circle cx="78" cy="112" r="${30+a}" ${b}/><circle cx="115" cy="92" r="${38+a}" ${b}/><circle cx="160" cy="106" r="${32+a}" ${b}/><rect x="${58-a}" y="${112-a}" width="${132+2*a}" height="${30+2*a}" rx="${15+a}" ${b}/>`;
+  return sh(2,`fill="${K}" stroke="${K}" stroke-width="4"`)+sh(0,'fill="#c5cbe8"')+face(122,114,1.05,'grumpy')+[[70,160],[100,166],[130,160],[160,166]].map(p=>L(`M${p[0]} ${p[1]}l-6 18`,4.5,'#4cc9f0')).join('')+P('M184 150L170 176H184L174 202L200 168H186L196 150Z','#ffd23f',3)+E(110,218,60,8,'#7fdcf7',3);},
+/* helpless */ ()=>thick('M204 218V118','#a0522d',6)+P('M176 120H214L224 128L214 136H176Z','#ffd23f',3)+P('M232 146H190L180 154L190 162H232Z','#ff8fb8',3)+thick('M68 170Q46 164 44 138','#cdb4ff',8)+thick('M172 170Q194 164 196 138','#cdb4ff',8)+P('M120 100C170 100 188 140 180 180C176 206 152 212 120 212C88 212 64 206 60 180C52 140 70 100 120 100Z','#cdb4ff',4)+face(120,160,1.25,'worry')+T(92,80,'?',46,'#ff8fb8',1)+T(140,64,'?',58,'#ffd23f',1)+T(48,104,'?',34,'#4cc9f0',1)
+];
+
+/* ---------- Data ---------- */
+const POS={'adj.':'tính từ','n.':'danh từ','v.':'động từ','n. phr.':'cụm danh từ','phr. v.':'cụm động từ','n./v.':'danh từ / động từ','v./n.':'động từ / danh từ'};
+const PAL=[
+  {tint:'#fff6cf',acc:'#ffd23f'},{tint:'#d9f4ff',acc:'#4cc9f0'},{tint:'#ffe3ee',acc:'#ff8fb8'},
+  {tint:'#daf8e9',acc:'#3ddc97'},{tint:'#eadffd',acc:'#b79cff'},{tint:'#ffe8d2',acc:'#ff9f43'}
+];
+const WORDS=[
+ {w:'amazing',pos:'adj.',ipa:'/əˈmeɪzɪŋ/',vi:'đáng kinh ngạc, tuyệt vời',ex:'We had an amazing experience exploring the caves in Phong Nha.',fam:'amaze (v.), amazement (n.), amazed (adj.)',hl:'amazing',p:4},
+ {w:'army-like',pos:'adj.',ipa:'/ˈɑːrmi laɪk/',vi:'giống như quân đội',ex:'The students followed an army-like routine during the training camp.',fam:'army (n.), soldier (n.)',hl:'army-like',p:0},
+ {w:'brilliant',pos:'adj.',ipa:'/ˈbrɪliənt/',vi:'xuất sắc, tuyệt vời',ex:'She gave a brilliant performance in the school talent show.',fam:'brilliantly (adv.), brilliance (n.)',hl:'brilliant',p:1},
+ {w:'campus',pos:'n.',ipa:'/ˈkæmpəs/',vi:'khuôn viên trường học',ex:'We went on a guided tour of the campus before choosing our summer course.',fam:'—',hl:'campus',p:0},
+ {w:'confidence',pos:'n.',ipa:'/ˈkɑːnfɪdəns/',vi:'sự tự tin',ex:'Taking part in the competition helped me build my confidence.',fam:'confident (adj.), confidently (adv.)',hl:'confidence',p:3},
+ {w:'coral reef',pos:'n. phr.',ipa:'/ˈkɔːrəl riːf/',vi:'rạn san hô',ex:'We saw colourful fish swimming around the coral reef.',fam:'coral (n./adj.)',hl:'coral reef',p:2},
+ {w:'eco-tour',pos:'n.',ipa:'/ˈiːkoʊ tʊr/',vi:'chuyến du lịch sinh thái',ex:'Our class took an eco-tour to learn about local wildlife.',fam:'ecology (n.), ecological (adj.), ecotourism (n.)',hl:'eco-tour',p:0},
+ {w:'embarrassing',pos:'adj.',ipa:'/ɪmˈbærəsɪŋ/',vi:'gây ngượng ngùng, xấu hổ',ex:'Forgetting the speaker’s name was an embarrassing moment for me.',fam:'embarrass (v.), embarrassment (n.), embarrassed (adj.)',hl:'embarrassing',p:1},
+ {w:'exhilarating',pos:'adj.',ipa:'/ɪɡˈzɪləreɪtɪŋ/',vi:'đầy phấn khích, hào hứng',ex:'Going on a boat trip across the bay was an exhilarating experience.',fam:'exhilarate (v.), exhilaration (n.), exhilarated (adj.)',hl:'exhilarating',p:5},
+ {w:'experience',pos:'n./v.',ipa:'/ɪkˈspɪriəns/',vi:'trải nghiệm; trải qua',ex:'Travelling alone gave me valuable experience in solving problems.',fam:'experienced (adj.), inexperienced (adj.)',hl:'experience',p:1},
+ {w:'explore',pos:'v.',ipa:'/ɪkˈsplɔːr/',vi:'khám phá, tìm hiểu',ex:'We spent the afternoon exploring the local area on foot.',fam:'exploration (n.), explorer (n.), exploratory (adj.)',hl:'exploring',p:4},
+ {w:'fauna',pos:'n.',ipa:'/ˈfɔːnə/',vi:'hệ động vật của một khu vực',ex:'The guide introduced us to the local fauna during the forest tour.',fam:'—',hl:'fauna',p:3},
+ {w:'flora',pos:'n.',ipa:'/ˈflɔːrə/',vi:'hệ thực vật của một khu vực',ex:'The national park is famous for its rich tropical flora.',fam:'floral (adj.)',hl:'flora',p:1},
+ {w:'lack',pos:'v./n.',ipa:'/læk/',vi:'thiếu; sự thiếu hụt',ex:'Some students lack confidence when speaking in front of a large audience.',fam:'lacking (adj.), lack (n.)',hl:'lack',p:4},
+ {w:'learn by rote',pos:'phr. v.',ipa:'/ˈlɝːn baɪ ˈroʊt/',vi:'học thuộc lòng máy móc, học vẹt',ex:'Students should understand new ideas instead of learning everything by rote.',fam:'rote learning (n.), learn (v.), learner (n.)',hl:'by rote',p:5},
+ {w:'memorable',pos:'adj.',ipa:'/ˈmemərəbəl/',vi:'đáng nhớ',ex:'Our first school trip was a memorable experience for the whole class.',fam:'memory (n.), memorize (v.), memorably (adv.)',hl:'memorable',p:2},
+ {w:'performance',pos:'n.',ipa:'/pərˈfɔːrməns/',vi:'buổi biểu diễn; màn trình diễn',ex:'The dancers gave an impressive performance at the cultural festival.',fam:'perform (v.), performer (n.), performing (adj.)',hl:'performance',p:0},
+ {w:'seabed',pos:'n.',ipa:'/ˈsiːbed/',vi:'đáy biển',ex:'The divers discovered unusual sea creatures on the seabed.',fam:'sea (n.), bed (n.)',hl:'seabed',p:5},
+ {w:'snorkeling',pos:'n.',ipa:'/ˈsnɔːrkəlɪŋ/',vi:'hoạt động lặn với ống thở',ex:'We went snorkeling to observe colourful fish near the island.',fam:'snorkel (v./n.), snorkeler (n.)',hl:'snorkeling',p:2},
+ {w:'theme',pos:'n.',ipa:'/θiːm/',vi:'chủ đề, đề tài',ex:'The main theme of the workshop was environmental protection.',fam:'thematic (adj.)',hl:'theme',p:1},
+ {w:'thrilling',pos:'adj.',ipa:'/ˈθrɪlɪŋ/',vi:'hồi hộp, ly kỳ, đầy phấn khích',ex:'Riding a roller coaster for the first time was a thrilling experience.',fam:'thrill (v./n.), thrilled (adj.), thrillingly (adv.)',hl:'thrilling',p:3},
+ {w:'touching',pos:'adj.',ipa:'/ˈtʌtʃɪŋ/',vi:'cảm động, gây xúc động',ex:'The documentary told a touching story about a family’s reunion.',fam:'touch (v./n.), touched (adj.), touchingly (adv.)',hl:'touching',p:4},
+ {w:'tribal dance',pos:'n. phr.',ipa:'/ˈtraɪbəl dæns/',vi:'điệu múa bộ lạc',ex:'We watched a traditional tribal dance during the cultural festival.',fam:'tribe (n.), tribal (adj.), tribalism (n.)',hl:'tribal dance',p:3},
+ {w:'unpleasant',pos:'adj.',ipa:'/ʌnˈplezənt/',vi:'khó chịu, không dễ chịu',ex:'We had an unpleasant experience when our bus broke down in the rain.',fam:'pleasant (adj.), pleasure (n.), pleasantly (adv.), unpleasantly (adv.)',hl:'unpleasant',p:1},
+ {w:'helpless',pos:'adj.',ipa:'/ˈhelpləs/',vi:'bất lực, không thể tự giúp mình',ex:'I felt completely helpless when I lost my way in the unfamiliar town.',fam:'help (v./n.), helpful (adj.), helplessness (n.)',hl:'helpless',p:0}
+];
+const N=WORDS.length, LAST=N+1;
+
+/* ---------- Helpers ---------- */
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const spk=`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5v5h4l5 4v-13l-5 4.5H3Z" fill="#2b2a4c" stroke="#2b2a4c" stroke-width="1.6" stroke-linejoin="round"/><path d="M15.5 9Q18 12 15.5 15M18.2 6.6Q23 12 18.2 17.4" fill="none" stroke="#2b2a4c" stroke-width="2" stroke-linecap="round"/></svg>`;
+const svgWrap=(i,inner,label)=>`<svg viewBox="0 0 240 240" role="img" aria-label="${esc(label)}">${inner}</svg>`;
+const speakable=t=>t.replace(/-/g,' ');
+
+function famHTML(f){
+  if(f==='—') return `<span class="chip none">Chưa có từ cùng họ</span>`;
+  return f.split(', ').map(x=>{const m=x.match(/^(.*?)\s*\((.*)\)$/);const w=m?m[1]:x,p=m?m[2]:'';return `<button class="chip" type="button" data-say="${esc(speakable(w))}" data-rate="0.9" aria-label="Nghe từ ${esc(w)}">${esc(w)}<i>${esc(p)}</i></button>`;}).join('');
+}
+function exHTML(wd){
+  const i=wd.ex.toLowerCase().indexOf(wd.hl.toLowerCase());
+  if(i<0) return esc(wd.ex);
+  return esc(wd.ex.slice(0,i))+'<mark>'+esc(wd.ex.slice(i,i+wd.hl.length))+'</mark>'+esc(wd.ex.slice(i+wd.hl.length));
+}
+function wordSlide(k){
+  const wd=WORDS[k],pal=PAL[wd.p];
+  return `<section class="slide" hidden style="--acc:${pal.acc};--tint:${pal.tint}">
+    <div class="art"><div class="disc">${svgWrap(k,ART[k](),'Hình minh hoạ cho từ '+wd.w)}</div></div>
+    <div class="info">
+      <div class="meta"><span class="pos">${esc(wd.pos)}</span><span class="posvi">${POS[wd.pos]||''}</span><span class="num">${k+1} / ${N}</span></div>
+      <h2 class="word">${esc(wd.w)}</h2>
+      <div class="sayrow">
+        <button class="say" type="button" data-say="${esc(speakable(wd.w))}" data-rate="0.85" aria-label="Nghe phát âm từ ${esc(wd.w)} (giọng Mỹ)">${spk}</button>
+        <span class="ipa">${esc(wd.ipa)}</span><span class="us">US</span>
+        <button class="btn slow" type="button" data-say="${esc(speakable(wd.w))}" data-rate="0.5">Đọc chậm</button>
+      </div>
+      <div><p class="lbl">Nghĩa</p><p class="mean">${esc(wd.vi)}</p></div>
+      <div><p class="lbl">Ví dụ</p>
+        <div class="ex"><button class="say small" type="button" data-say="${esc(wd.ex)}" data-rate="0.9" aria-label="Nghe câu ví dụ">${spk}</button><p>${exHTML(wd)}</p></div>
+      </div>
+      <div><p class="lbl">Họ từ · Word family</p><div class="fam">${famHTML(wd.fam)}</div></div>
+    </div>
+  </section>`;
+}
+function coverSlide(){
+  const pick=[0,2,12,11,18,3];
+  const tiles=pick.map(k=>`<div class="tile" style="--c:${PAL[WORDS[k].p].acc}">${svgWrap(k,ART[k](),WORDS[k].w)}</div>`).join('');
+  return `<section class="slide cover" hidden style="--acc:#ffd23f;--tint:#fff6cf">
+    <div class="copy"><p class="eyebrow">UNIT 5</p><h1>Our Experiences</h1>
+      <p class="sub">Từ vựng và cụm từ · ${N} từ · kèm phát âm giọng Mỹ</p>
+      <div class="row"><button class="btn acc big" type="button" data-go="1">Bắt đầu học</button>
+      <button class="btn big" type="button" data-say="Our Experiences" data-rate="0.85">${spk} Nghe tên bài</button></div></div>
+    <div class="tiles">${tiles}</div></section>`;
+}
+function endSlide(){
+  return `<section class="slide end" hidden style="--acc:#b79cff;--tint:#eadffd">
+    <div class="art"><div class="disc">${svgWrap(0,ART[0](),'Ngôi sao vui vẻ')}</div></div>
+    <div class="copy"><h2>Hoàn thành Unit 5!</h2><p>Bạn đã xem hết ${N} từ. Quay lại nghe lại những từ còn lạ nhé.</p>
+      <div class="row"><button class="btn acc big" type="button" data-go="1">Học lại từ đầu</button><button class="btn big" type="button" id="open2">Danh sách từ</button></div></div>
+  </section>`;
+}
+
+/* ---------- Build ---------- */
+const stage=document.getElementById('stage');
+stage.innerHTML=coverSlide()+WORDS.map((_,k)=>wordSlide(k)).join('')+endSlide();
+const slides=[...stage.children];
+const items=document.getElementById('items');
+items.innerHTML=WORDS.map((wd,k)=>`<button class="item" type="button" data-go="${k+1}" style="--c:${PAL[wd.p].tint}"><small>${k+1}</small>${esc(wd.w)}</button>`).join('');
+
+/* ---------- Speech (US English) ---------- */
+let voice=null,autoRead=false,toastTimer=null;
+const hasSpeech='speechSynthesis' in window;
+function pickVoice(){
+  if(!hasSpeech) return;
+  const v=speechSynthesis.getVoices().filter(x=>/^en[-_]US$/i.test(x.lang));
+  voice=v.find(x=>/(Samantha|Google US|Aria|Jenny|Ava|Allison|Zira|Natural)/i.test(x.name))||v[0]||null;
+}
+if(hasSpeech){pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}
+function toast(t){
+  const el=document.getElementById('toast');el.textContent=t;el.hidden=false;
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.hidden=true;},3200);
+}
+function say(text,rate,btn){
+  if(!hasSpeech){toast('Trình duyệt này chưa hỗ trợ đọc to.');return;}
+  document.querySelectorAll('.playing').forEach(b=>b.classList.remove('playing'));
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='en-US';u.rate=rate||0.9;u.pitch=1.05;
+  if(voice) u.voice=voice;
+  if(btn){u.onstart=()=>btn.classList.add('playing');u.onend=u.onerror=()=>btn.classList.remove('playing');}
+  speechSynthesis.speak(u);
+}
+
+/* ---------- Navigation ---------- */
+let cur=0;
+function go(n){
+  n=Math.max(0,Math.min(LAST,n));
+  slides.forEach((s,i)=>{s.hidden=i!==n;s.classList.remove('in');});
+  const s=slides[n];void s.offsetWidth;s.classList.add('in');
+  cur=n;
+  const w=n>=1&&n<=N?WORDS[n-1]:null,pal=w?PAL[w.p]:(n===0?PAL[0]:PAL[4]);
+  const r=document.documentElement.style;
+  r.setProperty('--stage',pal.tint);r.setProperty('--tint',pal.tint);r.setProperty('--acc',pal.acc);
+  document.getElementById('count').textContent=(n+1)+' / '+(LAST+1);
+  const pct=Math.round(Math.min(n,N)/N*100);
+  const f=document.getElementById('fill');f.style.setProperty('--pct',pct+'%');
+  f.parentElement.setAttribute('aria-valuenow',Math.min(n,N));
+  document.getElementById('prev').disabled=n===0;
+  document.getElementById('next').disabled=n===LAST;
+  document.getElementById('prev').style.opacity=n===0?.45:1;
+  document.getElementById('next').style.opacity=n===LAST?.45:1;
+  if(hasSpeech) speechSynthesis.cancel();
+  try{history.replaceState(null,'',n>=1&&n<=N?'#word-'+n:'#'+(n===0?'cover':'finish'));}catch(e){}
+  window.scrollTo({top:0});
+  if(autoRead&&w) say(speakable(w.w),0.85,s.querySelector('.say'));
+}
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.getElementById('next').onclick=()=>go(cur+1);
+const menu=document.getElementById('menu');
+const openMenu=()=>{menu.hidden=false;};
+const closeMenu=()=>{menu.hidden=true;};
+document.getElementById('open').onclick=openMenu;
+document.getElementById('close').onclick=closeMenu;
+menu.addEventListener('click',e=>{if(e.target===menu)closeMenu();});
+document.getElementById('auto').onclick=function(){
+  autoRead=!autoRead;this.setAttribute('aria-pressed',autoRead);this.textContent='Tự đọc: '+(autoRead?'Bật':'Tắt');
+};
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]');
+  if(g){closeMenu();go(parseInt(g.dataset.go,10));return;}
+  if(e.target.id==='open2'){openMenu();return;}
+  const b=e.target.closest('[data-say]');
+  if(b) say(b.dataset.say,parseFloat(b.dataset.rate)||0.9,b);
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closeMenu();return;}
+  if(!menu.hidden) return;
+  if(e.key==='ArrowRight') go(cur+1);
+  if(e.key==='ArrowLeft') go(cur-1);
+});
+let tx=null;
+stage.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+stage.addEventListener('touchend',e=>{
+  if(tx===null) return;
+  const dx=e.changedTouches[0].clientX-tx;tx=null;
+  if(Math.abs(dx)>70) go(cur+(dx<0?1:-1));
+},{passive:true});
+document.documentElement.lang='vi';
+const m=/^#word-(\d+)$/.exec(location.hash||'');
+go(m?Math.min(N,Math.max(1,parseInt(m[1],10))):0);
+</script>
+
+</body></html>
